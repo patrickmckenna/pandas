@@ -255,7 +255,7 @@ cdef object ensure_td64ns(object ts):
             td64_value = result
         except OverflowError as ex:
             # msg = f"{ts} outside allowed range [{NPY_NAT + 1}ns, {INT64_MAX}ns]"
-            msg = "outside allowed"
+            msg = "outside allowed range [-9223372036854775807ns, 9223372036854775807ns]"
             raise OutOfBoundsTimedelta(msg) from ex
 
     return np.timedelta64(td64_value, "ns")
@@ -923,7 +923,7 @@ cdef object create_timedelta(object value, str in_unit, NPY_DATETIMEUNIT out_res
             out_value = convert_to_timedelta64(value, in_unit).view(np.int64)
     except OverflowError as ex:
         # msg = f"{value} outside allowed range [{NPY_NAT + 1}ns, {INT64_MAX}ns]"
-        msg = "outside allowed"
+        msg = "outside allowed range [-9223372036854775807ns, 9223372036854775807ns]"
         raise OutOfBoundsTimedelta(msg) from ex
 
     if out_value == NPY_NAT:
