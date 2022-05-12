@@ -247,6 +247,10 @@ cdef object ensure_td64ns(object ts):
 
     unitstr = npy_unit_to_abbrev(td64_unit)
     mult = precision_from_unit(unitstr)[0]
+    # a = f"{ts}"
+    b = f"{NPY_NAT + 1}ns"
+    c = f"{INT64_MAX}"
+
 
     with cython.overflowcheck(True):
         try:
@@ -254,8 +258,8 @@ cdef object ensure_td64ns(object ts):
             print(f"\n\n\nresult is {type(result)}: {result}\n\n\n")
             td64_value = result
         except OverflowError as ex:
-            # msg = f"{ts} outside allowed range [{NPY_NAT + 1}ns, {INT64_MAX}ns]"
-            msg = "outside allowed range [-9223372036854775807ns, 9223372036854775807ns]"
+            msg = f"{str(ts)} outside allowed range [{NPY_NAT + 1}ns, {INT64_MAX}ns]"
+            # msg = "outside allowed range [-9223372036854775807ns, 9223372036854775807ns]"
             raise OutOfBoundsTimedelta(msg) from ex
 
     return np.timedelta64(td64_value, "ns")
